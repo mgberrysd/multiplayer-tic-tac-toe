@@ -7,10 +7,42 @@ const userSchema = new Schema({
         required: true,
         unique: true
     },
+    email: {
+        type: String,
+        required: true,
+        unique: true,
+        validate: {
+            validator: function (v) {
+                return /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(v);
+            },
+            message: "Please enter a valid email"
+        },
+    },
+    wins: {
+        type: Number,
+        default: 0,
+    },
+    losses: {
+        type: Number,
+        default: 0,
+    },
     password: {
         type: String,
         required: true
     },
+},
+    {
+        toJSON: {
+            virtuals: true,
+            getters: true,
+        },
+    });
+
+userSchema
+    .virtual('kD')
+    // Getter
+    .get(function () {
+        return this.wins/this.losses;
 });
 
 userSchema.pre('save', async function (next) {
