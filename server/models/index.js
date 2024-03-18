@@ -1,5 +1,5 @@
 // Models should match model name
 
-const Model = require('./Model');
+const User = require('./User');
 
-module.exports = { Model };
+module.exports = { User };

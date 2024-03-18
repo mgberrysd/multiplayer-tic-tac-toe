@@ -2,19 +2,25 @@
 // Should match across models, typedefs, resolvers, and front-end queries
 
 const typeDefs = `
-  type Model {
-    _id: ID!
-    name: String!
-    data1: String!
-    data2: String!
+  type User {
+    _id: ID
+    name: String
+    email: String
+    password: String
+    wins: Int
+    losses: Int
   }
 
   type Query {
-    data: [Model]
+    user(username: String!): User
+    users: [User]
   }
 
   type Mutation {
-    createData(data1: String!, data2: String!): Model
+    addUser(username: String!, email: String!, password: String!): Auth
+    login(username: String!, password: String!): Auth
+    updateWins(): User
+    updateLosses(): User
   }
 `;
 
