@@ -1,4 +1,5 @@
 const { User } = require('../models');
+const { signToken, AuthenticationError } = require('../utils/auth');
 
 // Example queries and mutations, use model names as necessary
 
@@ -8,7 +9,7 @@ const resolvers = {
       return User.find();
     },
     user: async (parent, { username }) => {
-      return User.findOne({ username }).populate('stories');
+      return User.findOne({ username });
     },
   },
   Mutation: {
@@ -34,21 +35,28 @@ const resolvers = {
 
       return { token, user };
     },
-    updateWins: async (parent, { username }) => {
-      const user = await User.findOneAndUpdate(
-        { username },
-        { $inc: { [`wins`]: 1 } },
-        { new: true }
-      );
-      return user ;
+    updateWins: async (parent, args, context) => {
+      if (context.user) {
+        const user = await User.findOneAndUpdate(
+          { _id: context.user._id },
+          { $inc: { [`wins`]: 1 } },
+          { new: true }
+        );
+        return user;
+      }
+      throw AuthenticationError;
     },
-    updateLosses: async (parent, { username }) => {
-      const user = await User.findOneAndUpdate(
-        { username },
-        { $inc: { [`losses`]: 1 } },
-        { new: true }
-      );
-      return user ;
+    updateLosses: async (parent, args, context) => {
+      if (context.user) {
+
+        const user = await User.findOneAndUpdate(
+          { _id: context.user._id },
+          { $inc: { [`losses`]: 1 } },
+          { new: true }
+        );
+        return user;
+      }
+      throw AuthenticationError;
     },
   },
 };

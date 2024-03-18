@@ -7,6 +7,9 @@ export const LOGIN_USER = gql`
       user {
         _id
         username
+        email
+        wins
+        losses
       }
     }
   }
@@ -26,8 +29,8 @@ export const ADD_USER = gql`
 `;
 
 export const UPDATE_WINS = gql`
-mutation updateWins($username: String!) {
-  updateWins(username: $username) {
+mutation updateWins() {
+  updateWins() {
     user {
       _id
       username
@@ -39,8 +42,8 @@ mutation updateWins($username: String!) {
 }`;
 
 export const UPDATE_LOSSES = gql`
-mutation updateLosses($username: String!) {
-  updateLosses(username: $username) {
+mutation updateLosses() {
+  updateLosses() {
     user {
       _id
       username
